@@ -8,6 +8,14 @@ const router = createRouter({
       path: "/",
       component: HomePage,
     },
+    {
+      path: "/report",
+      component: () => import('../views/FormForReport.vue'),
+    },
+    {
+      path: "/tailwind",
+      component: () => import('../views/TailwindPreview.vue'),
+    },
   ],
 });
 
