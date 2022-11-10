@@ -1,194 +1,145 @@
 <template>
-  <div class="helper">
+  <div class="mb-20">
     <form
-      class="helper space-y-8 divide-y divide-gray-200"
+      id="report-form"
+      class="space-y-8 divide-y divide-gray-200"
       @submit.prevent="submitData"
     >
       <div class="space-y-8 divide-y divide-gray-200">
+
         <div>
-          <div>
-            <h3 class="text-lg font-medium leading-6 text-gray-900">ФИО заказчика</h3>
-            <p class="mt-1 text-sm text-gray-500">
-              This information will be displayed publicly so be careful what you
-              share.
-            </p>
-          </div>
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            ФИО заказчика
+          </h3>
 
           <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div class="sm:col-span-2">
+            <div
+              v-for="field of fieldsWithNames"
+              :key="field.label"
+              class="sm:col-span-2"
+            >
               <BaseInput
-                type="text"
-                label="Фамилия"
-                v-model.trim="customer.surname"
-                required="true"
-              />
-            </div>
-
-            <div class="sm:col-span-2">
-              <BaseInput
-                type="text"
-                label="Имя"
-                v-model.trim="customer.name"
-                required="true"
-              />
-            </div>
-
-            <div class="sm:col-span-2">
-              <BaseInput
-                type="text"
-                label="Отчество"
-                v-model.trim="customer.patronymic"
+                v-model.trim="customer[field.name]"
+                :type="field.type"
+                :label="field.label"
+                :required="field.required"
               />
             </div>
           </div>
         </div>
 
         <div class="pt-8">
-          <div>
-            <h3 class="text-lg font-medium leading-6 text-gray-900">
-              Personal Information
-            </h3>
-            <p class="mt-1 text-sm text-gray-500">
-              Use a permanent address where you can receive mail.
-            </p>
-          </div>
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            ФИО водителя
+          </h3>
 
           <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div class="sm:col-span-2">
-              <label
-                for="first-name"
-                class="block text-sm font-medium text-gray-700"
-              >
-                Фамилия
-              </label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  name="first-name"
-                  id="first-name"
-                  autocomplete="given-name"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+            <div
+              v-for="field of fieldsWithNames"
+              :key="field.label"
+              class="sm:col-span-2"
+            >
+              <BaseInput
+                v-model.trim="driver[field.name]"
+                :type="field.type"
+                :label="field.label"
+                :required="field.required"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-8">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            ФИО исполнителя
+          </h3>
+
+          <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+            <div
+              v-for="field of fieldsWithNames"
+              :key="field.label"
+              class="sm:col-span-2"
+            >
+              <BaseInput
+                v-model.trim="employee[field.name]"
+                :type="field.type"
+                :label="field.label"
+                :required="field.required"
+              />
             </div>
 
-            <div class="sm:col-span-2">
-              <label
-                for="first-name"
-                class="block text-sm font-medium text-gray-700"
-              >
-                First name
-              </label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  name="first-name"
-                  id="first-name"
-                  autocomplete="given-name"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+            <div class="sm:col-span-6">
+              <BaseInput
+                v-model="object"
+                label="Объект"
+                type="text"
+              />
             </div>
 
-            <div class="sm:col-span-2">
-              <label
-                for="last-name"
-                class="block text-sm font-medium text-gray-700"
-              >
-                Last name
-              </label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  name="last-name"
-                  id="last-name"
-                  autocomplete="family-name"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+            <div class="sm:col-span-6">
+              <BaseInput
+                v-model="car"
+                label="Наименование и марка техники"
+                type="text"
+              />
             </div>
 
             <div class="sm:col-span-6">
               <label
-                for="street-address"
+                for="comment"
                 class="block text-sm font-medium text-gray-700"
               >
-                Объект
+                Примечания
               </label>
               <div class="mt-1">
-                <input
-                  type="text"
-                  name="street-address"
-                  id="street-address"
-                  autocomplete="street-address"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                <textarea
+                  id="comment"
+                  v-model="comment"
+                  rows="3"
+                  class="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
+            </div>
+
+            <div
+              v-for="field of fieldsWithTime"
+              :key="field.name"
+              class="sm:col-span-2"
+            >
+              <BaseInput
+                v-model="time[field.name]"
+                :type="field.type"
+                :label="field.label"
+                :required="field.required"
+                :min-value="field.minValue"
+              />
             </div>
 
             <div class="sm:col-span-6">
-              <label
-                for="street-address"
-                class="block text-sm font-medium text-gray-700"
+              <div
+                v-if="dataError"
+                class="rounded-md bg-red-50 p-4"
               >
-                Наименование и марка техники
-              </label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  name="street-address"
-                  id="street-address"
-                  autocomplete="street-address"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
+                <div class="flex">
+                  <div class="flex-shrink-0">
+                    <XCircleIcon
+                      class="h-5 w-5 text-red-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm text-red-700">
+                      Проверьте параметры времени
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <!-- todo: Время прибытие убытия ремонта -->
-            <div class="sm:col-span-2">
-              <label for="city" class="block text-sm font-medium text-gray-700">
-                City
-              </label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  name="city"
-                  id="city"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div class="sm:col-span-2">
-              <label
-                for="state"
-                class="block text-sm font-medium text-gray-700"
+              <p
+                v-if="totalTime"
+                class="mt-1 text-sm text-gray-500"
               >
-                State / Province
-              </label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  name="state"
-                  id="state"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div class="sm:col-span-2">
-              <label for="zip" class="block text-sm font-medium text-gray-700">
-                ZIP / Postal
-              </label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  name="zip"
-                  id="zip"
-                  autocomplete="postal-code"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+                Итого отработано: {{ totalTime }}
+              </p>
             </div>
           </div>
         </div>
@@ -204,6 +155,7 @@
             Cancel
           </button>
           <button
+            type="submit"
             class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             Save
@@ -215,35 +167,125 @@
 </template>
 
 <script>
-import BaseInput from "../components/form/BaseInput.vue";
+import BaseInput from '../components/form/BaseInput.vue';
+import { XCircleIcon } from '@heroicons/vue/solid';
 
 export default {
-  components: { BaseInput },
+  components: { BaseInput, XCircleIcon },
+  computed: {
+    timeData() {
+      return this.time.arrival && this.time.departure ? true : false;
+    },
+    dataError() {
+      return this.timeData && this.time.arrival > this.time.departure
+        ? true
+        : false;
+    },
+    totalTime() {
+      if (this.timeData && !this.dataError) {
+        const arrivalMs = Date.parse(this.time.arrival);
+        const departureMs = Date.parse(this.time.departure);
+        const repairMs = this.time.repair * 60000;
+        const durationMs = departureMs - arrivalMs - repairMs;
+
+        let hours = parseInt(durationMs / (1000 * 60 * 60));
+        let mins = parseInt((durationMs / (1000 * 60)) % 60);
+
+        hours = hours < 10 ? '0' + hours : hours;
+        mins = mins < 10 ? '0' + mins : mins;
+
+        return `${hours}:${mins}`;
+      }
+      return false;
+    },
+    fieldsWithTime() {
+      return [
+        {
+          name: 'arrival',
+          type: 'datetime-local',
+          label: 'Время прибытия',
+          required: true,
+          // defaultValue: localDateTime().slice(0, 11) + '00:00',
+        },
+        {
+          name: 'departure',
+          type: 'datetime-local',
+          label: 'Время убытия',
+          required: true,
+          // defaultValue: localDateTime().slice(0, 11) + '00:00',
+        },
+        {
+          name: 'repair',
+          type: 'number',
+          label: 'Время ремонта, мин.',
+          required: false,
+          // defaultValue: bearFormData?.repairTime || '',
+          minValue: 0,
+        },
+      ];
+    },
+  },
   data() {
     return {
+      fieldsWithNames: [
+        {
+          type: 'text',
+          label: 'Фамилия',
+          required: false,
+          name: 'surname',
+        },
+        {
+          type: 'text',
+          label: 'Имя',
+          required: false,
+          name: 'name',
+        },
+        {
+          type: 'text',
+          label: 'Отчество',
+          required: false,
+          name: 'patronymic',
+        },
+      ],
 
       customer: {
         surname: '',
         name: '',
         patronymic: '',
       },
-      employee: "",
-      object: "",
-      machine: "",
-      driver: "",
-      notes: "",
-      arrival: "",
-      departure: "",
-      repairTime: "",
-      totalTime: "00:00",
+      driver: {
+        surname: '',
+        name: '',
+        patronymic: '',
+      },
+      employee: {
+        surname: '',
+        name: '',
+        patronymic: '',
+      },
+      object: '',
+      car: '',
+      comment: '',
+      time: {
+        arrival: '',
+        departure: '',
+        repair: '',
+      },
     };
   },
   methods: {
     submitData() {
-      console.log("submitData");
-    },
-    LOG(data) {
-      console.log(data);
+      console.log('submitData');
+      const formData = {
+        customer: this.customer,
+        driver: this.driver,
+        employee: this.employee,
+        object: this.object,
+        car: this.car,
+        comment: this.comment,
+        time: this.time,
+      };
+      console.log(formData);
     },
   },
 };
