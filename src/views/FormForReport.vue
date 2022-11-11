@@ -6,7 +6,6 @@
       @submit.prevent="submitData"
     >
       <div class="space-y-8 divide-y divide-gray-200">
-
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">
             ФИО заказчика
@@ -169,6 +168,7 @@
 <script>
 import BaseInput from '../components/form/BaseInput.vue';
 import { XCircleIcon } from '@heroicons/vue/solid';
+import { createReport } from '../firebase';
 
 export default {
   components: { BaseInput, XCircleIcon },
@@ -271,11 +271,12 @@ export default {
         departure: '',
         repair: '',
       },
+
+      alertMessage: '',
     };
   },
   methods: {
     submitData() {
-      console.log('submitData');
       const formData = {
         customer: this.customer,
         driver: this.driver,
@@ -284,8 +285,15 @@ export default {
         car: this.car,
         comment: this.comment,
         time: this.time,
+        totalTime: this.totalTime,
       };
-      console.log(formData);
+      createReport(formData)
+        .then((res) => {
+          this.alertMessage = res.message;
+          this.$router.push('/')
+        })
+        .catch((err) => (this.alertMessage = err.message));
+      // todo: Если успех, выводим сообщение об успехе и переходим на главную. Иначе - сообщение Ошибка на сервере, попробуйте позже
     },
   },
 };
